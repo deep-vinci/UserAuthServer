@@ -1,11 +1,22 @@
 const express = require("express");
+const cookieParser = require('cookie-parser')
+const crypto = require('crypto');
+
+const db = require("./json-adapter");
 
 const app = express();
+app.use(cookieParser())
+
+const port = 49152;
 
 
-// make it dynamic so it can connnect to any database, use a module and import that as an function
 app.get("/", (req, res) => {
     // check for cookies if verified that cookie is valid than allow login
+    console.log(req.cookies.sessionId)
+    res.cookie("sessionId", crypto.randomUUID(), {
+        maxAge: 1000 * 60 * 15
+    });
+    res.send("");
 });
 
 app.post("/signup", (req, res) => {
@@ -14,12 +25,15 @@ app.post("/signup", (req, res) => {
     // send cookie too with a validity of some time period
 })
 
-app.post("/signin", (req, res) => {
+app.get("/signin", async (req, res) => {
+    // console.log(db.read());
+    res.send(await db.read());
     // check if cookie is not there
     // check for emails password, if the user password matches email pass than allow login
+
 })
 
 
-app.listen(343, () => {
-    console.log("listening at port 343");
+app.listen(port, () => {
+    console.log(`listening at port ${port}`);
 })
