@@ -1,8 +1,10 @@
 const express = require("express");
 const cookieParser = require('cookie-parser')
 const crypto = require('crypto');
-const demo = require('./routes/demo')
+const { createClient } = require('@supabase/supabase-js');
 
+const demo = require('./routes/demo')
+const signup = require('./routes/signup')
 
 const port = 49152;
 
@@ -11,8 +13,14 @@ app.use(cookieParser())
 app.use(express.urlencoded({ extended: true })); // For URL-encoded form data
 app.use(express.json()); // For JSON data (if applicable)
 
+// Initialize Supabase client
+const supabaseUrl = 'https://sjzennjjxtdpwupikymd.supabase.co';
+const supabaseKey = '';
+const supabase = createClient(supabaseUrl, supabaseKey);
 
+app.use(express.static(path.join(__dirname, "public")));
 app.use('/demo', demo);
+app.use('/signup', signup);
 
 app.get("/", (req, res) => {
     // check for cookies if verified that cookie is valid than allow login
