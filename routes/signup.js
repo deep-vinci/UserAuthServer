@@ -1,5 +1,6 @@
 require('dotenv').config();
 
+
 const path = require("path");
 
 const express = require("express");
@@ -10,7 +11,18 @@ router.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "..", "public", "signup.html"));
 });
 
-router.post("/", (req, res) => {
+router.post("/", async (req, res) => {
+    try {
+        const { data, error } = await supabase
+            .from('users') // Replace with your table name
+            .select('*');
+
+        if (error) throw error;
+        console.log(data);
+    } catch (err) {
+        console.error({ error: err.message });
+    }
+
     res.redirect("/signin");
 });
 
