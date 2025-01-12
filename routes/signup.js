@@ -1,6 +1,7 @@
 const path = require("path");
 const express = require("express");
 const supabase = require("../config/dbClient");
+const routes = require("../config/routes");
 
 const router = express.Router();
 
@@ -10,20 +11,32 @@ router.get("/", (req, res) => {
 
 router.post("/", async (req, res) => {
     
-    const { email } = req.body;
+    const { email, password } = req.body;
 
     try {
         const { data, error } = await supabase
             .from('users')
             .select('*')
             .eq('email', email); // Filter by email
-
-        if (error) throw error;
         
-        if (data[0].email == email) {
-            res.redirect("/signin");
+        if (error) throw error;
+
+        if (data.length == 0) {
+            // no email found
+            const { data, error } = await supabase
+                .from('users')
+                .insert([{ email, password }])
+
+            res.redirect(routes.signin)
         } else {
-            res.redirect("/signup")
+
+            if (data[0].email == email && String(data[0].password) == password) {
+                // user already present
+                res.redirect(routes.signin);
+            } else {
+                res.redirect(routes.signup)
+            }
+
         }
         
     } catch (err) {
@@ -35,15 +48,3 @@ router.post("/", async (req, res) => {
 
 module.exports = router;
 
-// app.get('/users', async (req, res) => {
-//     try {
-//       const { data, error } = await supabase
-//         .from('users') // Replace with your table name
-//         .select('*');
-
-//       if (error) throw error;
-//       res.json(data);
-//     } catch (err) {
-//       res.status(500).json({ error: err.message });
-//     }
-//   });
