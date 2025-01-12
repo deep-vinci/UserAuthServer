@@ -1,3 +1,4 @@
+require('dotenv').config();
 const path = require("path");
 
 const express = require("express");
@@ -5,7 +6,7 @@ const cookieParser = require('cookie-parser');
 const crypto = require('crypto');
 const { createClient } = require('@supabase/supabase-js');
 
-const port = 49152;
+const port = 3000 || process.env.PORT;
 
 const app = express();
 
