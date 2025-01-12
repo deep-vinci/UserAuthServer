@@ -23,10 +23,11 @@ router.post("/", async (req, res) => {
 
         if (data.length == 0) {
             // no email found
-            res.redirect(routes.signin)
+            res.redirect(routes.signup)
         } else {
             if (data[0].email == email && String(data[0].password) == password) {
                 // user already present
+                res.cookie('username', 'john_doe', { maxAge: 2000, httpOnly: true });
                 res.redirect(routes.app);
             } else {
                 res.redirect(routes.signup)
