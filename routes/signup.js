@@ -1,9 +1,17 @@
+require('dotenv').config();
+
+const path = require("path");
+
 const express = require("express");
 const router = express.Router();
 
 
 router.get("/", (req, res) => {
-    res.send("signup");
+    res.sendFile(path.join(__dirname, "..", "public", "signup.html"));
+});
+
+router.post("/", (req, res) => {
+    res.redirect("/signin");
 });
 
 module.exports = router;
