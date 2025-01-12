@@ -1,2 +1,2 @@
-# login-template
-basic yet extendable login system for my sites
+# login-backend
+Simple Plug and Play User authentication and authorizaition
