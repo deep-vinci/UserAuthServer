@@ -2,6 +2,7 @@ const path = require("path");
 const express = require("express");
 const supabase = require("../config/dbClient");
 const routes = require("../config/routes");
+const { generateToken } = require("../utils")
 
 const router = express.Router();
 
@@ -27,7 +28,7 @@ router.post("/", async (req, res) => {
         } else {
             if (data[0].email == email && String(data[0].password) == password) {
                 // user already present
-                res.cookie('username', 'john_doe', { maxAge: 2000, httpOnly: true });
+                res.cookie('session.id', generateToken() , { maxAge: 100000, httpOnly: true });
                 res.redirect(routes.app);
             } else {
                 res.redirect(routes.signup)
