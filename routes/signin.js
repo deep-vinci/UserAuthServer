@@ -27,7 +27,7 @@ router.post("/", async (req, res) => {
         } else {
             if (data[0].email == email && String(data[0].password) == password) {
                 // user already present
-                res.redirect("/");
+                res.redirect(routes.app);
             } else {
                 res.redirect(routes.signup)
             }
