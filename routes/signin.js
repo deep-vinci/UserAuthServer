@@ -13,6 +13,7 @@ router.get("/", (req, res) => {
 router.post("/", async (req, res) => {
         
     const { email, password } = req.body;
+    const sessionToken = generateToken();
 
     try {
         const { data, error } = await supabase
@@ -28,7 +29,13 @@ router.post("/", async (req, res) => {
         } else {
             if (data[0].email == email && String(data[0].password) == password) {
                 // user already present
-                res.cookie('session.id', generateToken() , { maxAge: 100000, httpOnly: true });
+                
+                // const { data, error } = await supabase
+                //     .from('session_table')
+                //     .insert([{ user_id: data[0].email, session_token: sessionToken }])
+        
+                if (error) throw error;
+                res.cookie('session_token', sessionToken , { maxAge: 100000, httpOnly: true });
                 res.redirect(routes.app);
             } else {
                 res.redirect(routes.signup)

@@ -1,5 +1,6 @@
 const path = require("path");
 const express = require("express");
+const bcrypt = require("bcryptjs");
 const supabase = require("../config/dbClient");
 const routes = require("../config/routes");
 
@@ -13,6 +14,9 @@ router.post("/", async (req, res) => {
     
     const { email, password } = req.body;
 
+    const salt = await bcrypt.genSalt(10);
+    const securePassword = await bcrypt.hash(password, salt);
+
     try {
         const { data, error } = await supabase
             .from('users')
@@ -25,12 +29,13 @@ router.post("/", async (req, res) => {
             // no email found
             const { data, error } = await supabase
                 .from('users')
-                .insert([{ email, password }])
+                .insert([{ email: email, password: securePassword }])
 
+            if(error) throw error;
             res.redirect(routes.signin)
         } else {
 
-            if (data[0].email == email && String(data[0].password) == password) {
+            if (data[0].email == email) {
                 // user already present
                 res.redirect(routes.signin);
             } else {
