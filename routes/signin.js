@@ -1,5 +1,6 @@
 const path = require("path");
 const express = require("express");
+const bcrypt = require("bcryptjs");
 const supabase = require("../config/dbClient");
 const routes = require("../config/routes");
 const { generateToken } = require("../utils")
@@ -27,14 +28,16 @@ router.post("/", async (req, res) => {
             // no email found
             res.redirect(routes.signup)
         } else {
-            if (data[0].email == email && String(data[0].password) == password) {
+            const passowrdCompare = await bcrypt.compare(password, data[0].password);
+
+            if (data[0].email == email && passowrdCompare) {
                 // user already present
                 
                 // const { data, error } = await supabase
                 //     .from('session_table')
                 //     .insert([{ user_id: data[0].email, session_token: sessionToken }])
         
-                if (error) throw error;
+                // if (error) throw error;
                 res.cookie('session_token', sessionToken , { maxAge: 100000, httpOnly: true });
                 res.redirect(routes.app);
             } else {
