@@ -1,8 +1,10 @@
 const path = require("path");
 const express = require("express");
 const bcrypt = require("bcryptjs");
-const supabase = require("../config/dbClient");
+
 const routes = require("../config/routes");
+const UserRepository = require('../repositories/userRepository');
+
 
 const router = express.Router();
 
@@ -14,40 +16,18 @@ router.post("/", async (req, res) => {
     
     const { email, password } = req.body;
 
-    const salt = await bcrypt.genSalt(10);
-    const securePassword = await bcrypt.hash(password, salt);
-
     try {
-        const { data, error } = await supabase
-            .from('users')
-            .select('*')
-            .eq('email', email); // Filter by email
-        
-        if (error) throw error;
+        const user = await UserRepository.findUserByEmail(email);
+        if (user) res.redirect(routes.signup);
 
-        if (data.length == 0) {
-            // no email found
-            const { data, error } = await supabase
-                .from('users')
-                .insert([{ email: email, password: securePassword }])
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
 
-            if(error) throw error;
-            res.redirect(routes.signin)
-        } else {
-
-            if (data[0].email == email) {
-                // user already present
-                res.redirect(routes.signin);
-            } else {
-                res.redirect(routes.signup)
-            }
-
-        }
-        
+        await UserRepository.createUser(email, hashedPassword);
+        res.redirect(routes.signin);
     } catch (err) {
         console.error({ error: err.message });
     }
-
     
 });
 
