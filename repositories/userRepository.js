@@ -25,11 +25,3 @@ class UserRepository {
 }
 
 module.exports = new UserRepository();
-// new UserRepository().doesEmailExistInDb("b@example.com").then(data => {
-//     console.log(data);
-    // if(data) {
-    //     console.log(11)
-    // } else {
-    //     console.log(22)
-    // }
-// })
