@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser');
 const crypto = require('crypto');
 const { createClient } = require('@supabase/supabase-js');
 
-const port = 3000 || process.env.PORT;
+const port = process.env.PORT || 3000;
 
 const app = express();
 
