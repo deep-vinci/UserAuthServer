@@ -1,4 +1,4 @@
-# Login Backend Project
+# User auth server
 
 ## Overview
 This project is a robust backend implementation for user authentication, built using **Node.js**, **Express.js**, and a **configurable database**. It provides essential functionalities such as user registration, login, and logout, with secure password hashing using **bcrypt** and **JSON Web Tokens (JWT)** (WIP) for session management. This backend can be seamlessly integrated into any web application requiring user authentication.
