@@ -17,7 +17,7 @@ router.get("/", (req, res) => {
 router.post("/", async (req, res) => {
         
     const { email, password } = req.body;
-    const maxAge = 1 * 60 * 1000;
+    const maxAge = 1 * 60 * 60 * 1000;
     const expireAt = new Date(new Date().getTime() + maxAge);
     const sessionToken = generateToken();
 
