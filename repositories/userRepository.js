@@ -13,10 +13,10 @@ class UserRepository {
         return data.length > 0 ? data[0] : null;
     }
 
-    async createUser(authID, email, securePassword, authProvider) {
+    async createUser(authID, email, securePassword, authProvider, profilePictureUrl) {
         const { data, error } = await db
             .from('users')
-            .insert([{ auth_id: authID, email: email, password: securePassword, auth_provider: authProvider }])
+            .insert([{ auth_id: authID, email: email, password: securePassword, auth_provider: authProvider, profile_picture_url: profilePictureUrl }])
             .select();
 
         if (error) throw error;
