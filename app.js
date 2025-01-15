@@ -19,6 +19,10 @@ app.use('/demo', require('./routes/demo'));
 app.use('/signup', require('./routes/signup'));
 app.use('/signin', require('./routes/signin'));
 
+// auth providers
+app.use('/auth/google/callback', require('./routes/auth/google'));
+app.use('/auth/discord/callback', require('./routes/auth/discord'));
+
 app.listen(port, () => {
     console.log(`listening at port ${port}`);
 })
