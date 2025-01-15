@@ -21,8 +21,8 @@ router.get('/', async (req, res) => {
     try {
         const response = await axios.post('https://oauth2.googleapis.com/token', {
             code,
-            client_id: process.env.CLIENT_ID,
-            client_secret: process.env.CLIENT_SECRET,
+            client_id: process.env.GOOGLE_CLIENT_ID,
+            client_secret: process.env.GOOGLE_CLIENT_SECRET,
             redirect_uri: 'http://localhost:3000/auth/google/callback',
             grant_type: 'authorization_code',
         });
