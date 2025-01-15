@@ -23,7 +23,7 @@ router.post("/", async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        await UserRepository.createUser(email, hashedPassword);
+        await UserRepository.createUser("", email, hashedPassword, "email");
         res.redirect(routes.signin);
     } catch (err) {
         console.error({ error: err.message });
